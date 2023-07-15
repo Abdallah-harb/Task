@@ -9,7 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
-
+use Illuminate\Validation\ValidationException;
 class AuthenticatedSessionController extends Controller
 {
     /**
@@ -20,16 +20,37 @@ class AuthenticatedSessionController extends Controller
         return view('auth.login');
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
-    public function store(RegisterRequest $request): RedirectResponse
+/*
+    public function store(Request $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
         return redirect()->intended(RouteServiceProvider::HOME);
+    }*/
+    public function store(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        if ($this->attemptLogin($request)) {
+            return redirect()->intended('/');
+        }
+
+        throw ValidationException::withMessages([
+            'email' => __('auth.failed'),
+        ]);
+    }
+
+    protected function attemptLogin(Request $request)
+    {
+        return Auth::guard('web')->attempt(
+            $request->only('email', 'password'),
+            $request->filled('remember')
+        );
     }
 
     /**

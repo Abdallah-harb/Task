@@ -23,9 +23,11 @@ class DataRequest extends FormRequest
     {
         return [
             "name" => 'required|string|max:100',
-            'email' => 'required', 'string', 'email',
-            'password' => 'required|string|min:6',
-            "data" => "required|string"
+            'email' => 'required|string|email|unique:users,email,'.$this->id,
+            'password' => 'required_without:id|string|min:6',
+            "data" => "required|string",
+            "image" => "required_without:id|mimes:jpg,png,jpeg,gif|max:2048"
+
         ];
     }
 }

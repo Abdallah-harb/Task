@@ -55,6 +55,7 @@
                                     <th>#</th>
                                     <th>name</th>
                                     <th>data</th>
+                                    <th>image</th>
                                     <th>Process</th>
                                 </tr>
                                 </thead>
@@ -64,6 +65,13 @@
                                         <td>{{$loop->iteration}}</td>
                                         <td>{{$user->name}}</td>
                                         <td>{{$user->data}}</td>
+                                        <td>
+                                            @if(!empty($user->image))
+                                                <img src="{{asset('image/'.$user->image)}}" width="50px" height="80px">
+                                            @else
+                                                <img src="{{asset('image/anime.jpeg')}}" width="50px" height="80px">
+                                            @endif
+                                        </td>
                                         <td>
                                             <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                                     data-target="#edit{{ $user->id }}"
@@ -92,7 +100,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <!-- add_form -->
-                                                    <form action="{{route('update.user',$user->id )}}" method="post">
+                                                    <form action="{{route('update.user',$user->id )}}" method="post" enctype="multipart/form-data">
                                                         @csrf
                                                         <input id="id" type="hidden" name="id" class="form-control"
                                                                value="{{ $user->id }}">
@@ -115,6 +123,15 @@
                                                                        value="{{$user->email}}"
                                                                        name="email" required>
                                                             </div>
+                                                        </div>
+                                                        <br>
+                                                        @if(!empty($user->image))
+                                                            Current Image
+                                                            <img src="{{asset('image/'.$user->image)}}" width="50px" height="80px">
+                                                        @else
+                                                        @endif
+                                                        <br>
+                                                        <div class="row">
                                                             <div class="col">
                                                                 <label for="data"
                                                                        class="mr-sm-2">data
@@ -123,8 +140,14 @@
                                                                        value="{{$user->data}}"
                                                                        name="data" required>
                                                             </div>
-                                                        </div>
+                                                            <div class="col">
+                                                                <label for="data"
+                                                                       class="mr-sm-2">New Image
+                                                                    :</label>
+                                                                <input type="file" name="image" accept="image/*" class="form-control">
+                                                            </div>
 
+                                                        </div>
                                                         <br><br>
 
                                                         <div class="modal-footer">

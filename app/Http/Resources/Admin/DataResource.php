@@ -18,7 +18,8 @@ class DataResource extends JsonResource
             "id" =>$this->id,
             "name" => $this->name,
             "email" => $this->email,
-            "data" => $this->data
+            "data" => $this->data,
+            "image" => asset("/public/image/".$this->image)
         ];
     }
 }

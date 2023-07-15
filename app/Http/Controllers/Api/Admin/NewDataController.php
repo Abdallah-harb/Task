@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Helper\HelperFile;
 use App\Http\Helper\ResponseHelper;
+use App\Http\Requests\Admin\DataRequest;
 use App\Http\Resources\Admin\DataResource;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class NewDataController extends Controller
     {
         try {
             $users = User::whereType('user')->get();
-            if(count($users)<1){
+            if(count($users) < 1){
                 return  ResponseHelper::sendResponseSuccess([],Response::HTTP_OK,"There are no User Yet");
             }
             return  ResponseHelper::sendResponseSuccess(DataResource::collection($users));
@@ -30,16 +32,18 @@ class NewDataController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DataRequest $request)
     {
         try {
-            $user = User::create([
+            $image = HelperFile::uploadImage($request->image,'image');
+            $NewUser =User::create([
                 "name" => $request->name,
                 "email" => $request->email,
                 "password" => bcrypt($request->password),
-                "data" => $request->data
+                "data" => $request->data,
+                "image"=> $image
             ]);
-            return  ResponseHelper::sendResponseSuccess(new DataResource($user));
+            return  ResponseHelper::sendResponseSuccess(new DataResource($NewUser));
 
         }catch (\Exception $ex){
             return ResponseHelper::sendResponseError([],Response::HTTP_BAD_REQUEST,$ex->getMessage());
@@ -66,6 +70,10 @@ class NewDataController extends Controller
     {
         try {
             $user = User::whereId($id)->first();
+            if($request->hasFile('image')){
+                $image = HelperFile::uploadImage($request->image,'image');
+                $user->update([ "image"=> $image]);
+            }
             $user->update([
                 "name" => $request->name,
                 "email" => $request->email,

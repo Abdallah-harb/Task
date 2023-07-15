@@ -22,7 +22,7 @@ class BirthdayController extends Controller
             $message = "happy birthday";
            return ResponseHelper::sendResponseSuccess([],Response::HTTP_OK,"Your birthday , celebrate");
         }
-        return ResponseHelper::sendResponseSuccess([],Response::HTTP_OK,"Not BirthDay today");
+        return ResponseHelper::sendResponseSuccess([],Response::HTTP_OK,"Not BirthDay today it in " . Carbon::parse($user_birthday)->format('d-m'));
     }
 
 

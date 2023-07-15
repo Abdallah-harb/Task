@@ -16,6 +16,13 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- data-->
+        <div class="mt-4">
+            <x-input-label for="date" />Date
+            <x-text-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date')" required  />
+            <x-input-error :messages="$errors->get('date')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />

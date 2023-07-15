@@ -19,6 +19,8 @@
 
     @if(isset($message))
         <h2 class="main-content-title tx-24 mg-b-1 mg-b-lg-1">Your BirthDay</h2>
+        @else
+        <h2 class="main-content-title tx-24 mg-b-1 mg-b-lg-1">Birthday Not Today it is in : {{Carbon\Carbon::parse(auth()->user()->data)->format('d-m')}}</h2>
         @endif
 
 			</div>

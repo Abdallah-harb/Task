@@ -18,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::get('/',[DataController::class,'main'])->middleware('auth');
-
 Route::group(['prefix' => 'User',"middleware" => ["auth","admin"]],function(){
     Route::get('/',[DataController::class,'index'])->name('all.user');
     Route::get('create',[DataController::class,'create'])->name('create.user');
@@ -26,7 +25,5 @@ Route::group(['prefix' => 'User',"middleware" => ["auth","admin"]],function(){
     Route::post('update/{id}',[DataController::class,'update'])->name('update.user');
     Route::post('delete/{id}',[DataController::class,'destroy'])->name('delete.user');
 });
-
-
 
 require __DIR__.'/auth.php';
